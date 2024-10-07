@@ -3,8 +3,10 @@
 <html>
     <head>
         <title>{{page_title}}</title>
-        <link rel="stylesheet" href="{% static 'css/admin/edit.css' %}">
+        <script src="{% static 'js/nav.js' %}" defer></script>
         <link rel="stylesheet" href="{% static 'css/admin/nav.css' %}">
+        <link rel="stylesheet" href="{% static 'css/admin/edit.css' %}">
+        <link rel="stylesheet" href="{% static 'css/DetachedMenu.css' %}">
         <link rel="stylesheet" href="{% static 'css/admin/global.css' %}">
         <link rel="stylesheet" href="{% static 'css/error-message.css' %}">
         <link rel="stylesheet" href="{% static 'css/success-message.css' %}">
@@ -16,6 +18,9 @@
 
         <script>
             window.addEventListener('load', () => {
+                detached_pop_up_menu.style.top = '70px';
+                detached_pop_up_menu.style.right = '0px';
+
                 if(document.querySelector('.no-data')){
                     right_container = document.querySelector('.right-container');
                     right_container.style.justifyContent = 'center';
@@ -32,14 +37,24 @@
                 </div>
 
                 <div class="right-nav">
-                    <a href="{% url 'admin-change-password' %}">Change password </a>
+                    <img src="{{request.user.ProfileImage.url}}" alt="" class="profile-img">
 
-                    <p class="separator">|</p>
-                    <a href="{% url 'add-question' %}">Add Questions </a>
+                    <div class="detached-pop-up hide">
+                        <a href="{% url 'admin-change-password' %}">
+                            <i class='bx bxs-lock' ></i>
+                            <p>Change password</p>
+                        </a>
 
-                    <p class="separator">|</p>
-                    <a href="{% url 'logout' %}">Logout </a>
+                        <a href="{% url 'add-question' %}">
+                            <i class='bx bxs-add-to-queue'></i>
+                            <p>Add Questions</p>
+                        </a>
 
+                        <a href="{% url 'logout' %}">
+                            <i class='bx bx-log-out' ></i>
+                            <p>Logout</p>
+                        </a>
+                    </div>
                 </div>
 
             </div>
