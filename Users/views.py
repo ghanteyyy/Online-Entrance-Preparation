@@ -49,6 +49,70 @@ def PaginatePage(request, data, number_of_data=100):
     return paginator, data, page
 
 
+def AddUsers(request):
+    '''
+    Handle to select whether to create admin or normal user by the super-admin
+    '''
+
+    return render(request, 'admin/Add-Users.html',
+                  {
+                      'page_title': 'Add ADMIN | USERS'
+                  }
+            )
+
+
+def AddUsersUser(request):
+    '''
+    Handle user creation by the super-admin
+    '''
+
+    if request.method == 'POST':
+        return SignUp(request)
+
+    return render(request, 'admin/Add-Users-User.html',
+                  {
+                      'page_title': 'Add Users'
+                  }
+            )
+
+
+def AddUsersAdmin(request):
+    '''
+    Handle admin creation by the super-admin
+    '''
+
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['new_password1']
+
+        if 'uploaded-profile-image' in request.FILES:
+            profile_image_path = request.FILES['uploaded-profile-image']
+
+        else:
+            profile_image_path = None
+
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists')
+
+        else:
+            new_admin = CustomUser.objects.create_superuser(email=email, password=password)
+
+            if profile_image_path:
+                new_admin.ProfileImage = profile_image_path
+
+            new_admin.is_staff = True
+            new_admin.set_password(password)
+            new_admin.save()
+
+            messages.success(request, 'Email already exists')
+
+    return render(request, 'admin/Add-Users-Admin.html',
+                  {
+                      'page_title': 'Add Admin'
+                  }
+            )
+
+
 def SignUp(request):
     """
     Handle user sign-up requests
@@ -88,6 +152,10 @@ def SignUp(request):
 
         newUser.set_password(password)
         newUser.save()
+
+        if request.user.is_superuser:
+            messages.success(request, 'Created user successfully')
+            return redirect('add-users-user')
 
         user = authenticate(request, email=email, password=password)
         login(request, user)
@@ -1368,9 +1436,9 @@ def EditUsers(request, id):
     user = CustomUser.objects.get(id=id)
 
     if request.method == 'POST':
-        user.email = request.POST['Email']
-        password = request.POST['password']
         user.FullName = request.POST['full_name']
+        user.email = request.POST.get('Email', None)
+        password = request.POST.get('password', None)
 
         if user.Gender is not None:
             user.Gender = request.POST['Gender'].lower()
