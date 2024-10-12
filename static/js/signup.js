@@ -1,3 +1,11 @@
+feedBack = document.querySelector('.success-message');
+
+if(feedBack){
+    setTimeout(function() {
+        $(feedBack).fadeOut('fast');
+    }, 1500); // <-- time in milliseconds
+}
+
 date = new Date();
 
 password_box = document.querySelector('#password');
@@ -15,30 +23,31 @@ male_radio = document.querySelector('#male');
 female_radio = document.querySelector('#female');
 others_radio = document.querySelector('#others');
 
-gender_div = [male_div, female_div, others_div];
+if(male_div && female_div && others_div){
+    gender_div = [male_div, female_div, others_div];
 
-gender_div.forEach((div) => {
-    div.addEventListener('click', () => {
-        for(sex_div of gender_div){
-            sex_div.classList.remove('selected-gender');
-        }
+    gender_div.forEach((div) => {
+        div.addEventListener('click', () => {
+            for(sex_div of gender_div){
+                sex_div.classList.remove('selected-gender');
+            }
 
-        if(div == male_div){
-            male_radio.checked = true;
-        }
+            if(div == male_div){
+                male_radio.checked = true;
+            }
 
-        else if(div == female_div){
-            female_radio.checked = true;
-        }
+            else if(div == female_div){
+                female_radio.checked = true;
+            }
 
-        if(div == others_div){
-            others_radio.checked = true;
-        }
+            if(div == others_div){
+                others_radio.checked = true;
+            }
 
-        div.classList.add('selected-gender');
+            div.classList.add('selected-gender');
+        });
     });
 }
-);
 
 
 var selectedFile;
@@ -82,6 +91,7 @@ function validateForm(){
     password_regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     dob_day = document.querySelector('#dob-day');
+    genderDiv = document.querySelector('.gender');
     dob_year = document.querySelector('#dob-year');
     dob_month = document.querySelector('#dob-month');
     fullNameArea = document.querySelector('#full_name');
@@ -93,21 +103,20 @@ function validateForm(){
     email_error = document.querySelector('.signup-email-error');
 
     password = password_box.value;
-    fullNameValue = fullNameArea.value.trim();
     email = document.querySelector('#email').value;
 
-    dob_day_value = dob_day.value;
-    dob_year_value = dob_year.value;
-    dob_month_value = dob_month.value;
+    if(fullNameArea){
+        fullNameValue = fullNameArea.value.trim();
 
-    if(!fullNameValue){
-        success = false;
-        fullNameError.classList.add('show-error');
-        fullNameError.innerText = 'This field must not be empty';
-    }
+        if(!fullNameValue){
+            success = false;
+            fullNameError.classList.add('show-error');
+            fullNameError.innerText = 'This field must not be empty';
+        }
 
-    else{
-        fullNameError.classList.remove('show-error');
+        else{
+            fullNameError.classList.remove('show-error');
+        }
     }
 
     if(!email_regex.test(email)){
@@ -130,35 +139,43 @@ function validateForm(){
         password_error.classList.remove('show-error');
     }
 
-    if(!dob_day_value || !dob_month_value || !dob_year_value ||
-       isNaN(parseInt(dob_day_value)) || isNaN(parseInt(dob_month_value)) || isNaN(parseInt(dob_year_value)) ||
-       !(dob_day_value > 0 && dob_day_value < 32) || !(dob_month_value > 0 && dob_month_value < 13) ||
-       !(dob_year_value >= 1920 && dob_year_value <= date.getFullYear())){
-           success = false;
-           dob_error.classList.add('show-error');
-           dob_error.innerText = 'Invalid Date of Birth';
-        }
+    if(dob_year && dob_month && dob_day){
+        dob_day_value = dob_day.value;
+        dob_year_value = dob_year.value;
+        dob_month_value = dob_month.value;
 
-    else{
-        dob_error.classList.remove('show-error');
+        if(!dob_day_value || !dob_month_value || !dob_year_value ||
+        isNaN(parseInt(dob_day_value)) || isNaN(parseInt(dob_month_value)) || isNaN(parseInt(dob_year_value)) ||
+        !(dob_day_value > 0 && dob_day_value < 32) || !(dob_month_value > 0 && dob_month_value < 13) ||
+        !(dob_year_value >= 1920 && dob_year_value <= date.getFullYear())){
+            success = false;
+            dob_error.classList.add('show-error');
+            dob_error.innerText = 'Invalid Date of Birth';
+            }
+
+        else{
+            dob_error.classList.remove('show-error');
+        }
     }
 
     selected_gender = '';
 
-    for(genderDiv of gender_div){
-        if(genderDiv.classList.contains('selected-gender')){
-            selected_gender = genderDiv;
+    if(genderDiv){
+        for(genderDiv of gender_div){
+            if(genderDiv.classList.contains('selected-gender')){
+                selected_gender = genderDiv;
+            }
         }
-    }
 
-    if(selected_gender){
-        gender_error.classList.remove('show-error');
-    }
+        if(selected_gender){
+            gender_error.classList.remove('show-error');
+        }
 
-    else{
-        success = false;
-        gender_error.classList.add('show-error');
-        gender_error.innerText = 'Select any one';
+        else{
+            success = false;
+            gender_error.classList.add('show-error');
+            gender_error.innerText = 'Select any one';
+        }
     }
 
     return success == true;

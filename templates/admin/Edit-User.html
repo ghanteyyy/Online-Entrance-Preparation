@@ -121,10 +121,14 @@
         <script src="{% static 'js/admin/change-user.js' %}"></script>
 
         <div class="buttons">
-            <button type="submit" class="save-button" onclick="return validateForm()">Save</button>
+            {% if request.user.is_staff is False %}
+                <button type="submit" class="save-button" onclick="return validateForm()">Save</button>
+            {% endif %}
 
             {% if data.is_active %}
-                <a href="{% url 'delete-account-from-admin' data.id %}" class="delete-button">Delete</a>
+                {% if request.user.is_staff is False %}
+                    <a href="{% url 'delete-account-from-admin' data.id %}" class="delete-button">Delete</a>
+                {% endif %}
 
             {% else %}
                 <a class="delete-button deleted-button">Deleted</a>

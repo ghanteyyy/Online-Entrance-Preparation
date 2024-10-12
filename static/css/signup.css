@@ -24,7 +24,6 @@
 
 .inner-wrapper{
     width: 80%;
-    height: 100%;
     display: flex;
 }
 
@@ -43,7 +42,6 @@
 
 .form-right{
     width: 50%;
-    height: 100%;
     display: flex;
     padding-top: 10px;
     align-items: center;

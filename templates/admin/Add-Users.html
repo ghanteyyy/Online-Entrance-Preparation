@@ -1,0 +1,12 @@
+{% extends 'admin/nav.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/admin/add-users.css'%}">
+
+    <div class="add-users">
+        <a href="{% url 'add-users-user' %}">Add Users</a>
+        <a href="{% url 'add-users-admin' %}">Add Admin</a>
+    </div>
+
+{% endblock %}

@@ -51,9 +51,31 @@
 }
 
 @media screen and (max-width: 600px) {
+    .profile-img{
+        display: none;
+    }
+
     .detached-pop-up{
-        top: 0;
-        width: 100%;
-        position: relative;
+        position: static;
+    }
+
+    .detached-pop-up.hide{
+        display: flex;
+        padding: 10px;
+        cursor: pointer;
+        width: fit-content;
+        margin-right: 10px;
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .detached-pop-up a{
+        gap: 5px;
+        width: auto;
+        padding: 5px;
+    }
+
+    .detached-pop-up p{
+        font-size: 10px;
     }
 }

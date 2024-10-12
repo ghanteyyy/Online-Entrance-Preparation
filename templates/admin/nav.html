@@ -45,6 +45,13 @@
                             <p>Change password</p>
                         </a>
 
+                        {% if request.user.is_staff is False %}
+                            <a href="{% url 'add-users' %}">
+                                <i class='bx bxs-user-circle'></i>
+                                <p>Add Users</p>
+                            </a>
+                        {% endif %}
+
                         <a href="{% url 'add-question' %}">
                             <i class='bx bxs-add-to-queue'></i>
                             <p>Add Questions</p>

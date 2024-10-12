@@ -1,0 +1,58 @@
+{% extends 'admin/nav.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <script src="{% static 'js/signup.js' %}" defer></script>
+    <script src="{% static 'js/togglePassword.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'css/admin/add-users.css'%}">
+
+    <div class="wrapper add-admin">
+        <div class="inner-wrapper">
+            <div class="form-left signup-left-image">
+                <img src="{% static 'images/admin/add-admin.jpg' %}" class="left-form-image">
+            </div>
+
+            <div class="form-right">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-item">
+                        <i class='bx bxs-envelope bx-login'></i>
+                        <input type="text" placeholder="Email" id="email" name="email">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <small class="signup-email-error sho-error">
+                                    {{message}}
+                                </small>
+                            {% endfor %}
+
+                        {% else %}
+                            <small class="signup-email-error"></small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-item">
+                        <i class='bx bxs-lock-alt bx-login' ></i>
+                        <input type="password" placeholder="Password" id="password" name="new_password1">
+                        <i class='bx bxs-hide bxs-show pass-eye1'></i>
+                        <small class="password-error"></small>
+                    </div>
+
+                    <div class="upload-profile-image-div">
+                        <p>Profile</p>
+                        <img src="{% static 'pp-female.jpg' %}" alt="" class="user-image">
+                        <input type="file" accept="image/*" name="uploaded-profile-image" id="upload-profile-button">
+                        <small class="profile-image-error">Invalid image file</small>
+                    </div>
+
+                    <div class="form-item submit-btn signup-submit-btn">
+                        <button onclick="return validateForm()" type="submit">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

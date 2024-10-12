@@ -1,0 +1,115 @@
+{% extends 'admin/nav.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin/add-users.css'%}">
+    <script src="{% static 'js/signup.js' %}" defer></script>
+    <script src="{% static 'js/togglePassword.js' %}" defer></script>
+    <script src="{% static 'js/admin/add-users.js' %}" defer></script>
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <p class="success-message">{{message}}</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="wrapper add-user">
+        <div class="inner-wrapper">
+            <div class="form-left signup-left-image">
+            </div>
+
+            <div class="form-right">
+                <form action="{% url 'signup' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="form-item">
+                        <i class='bx bxs-user bx-login'></i>
+                        <input type="text" placeholder="Full Name" id="full_name" name="full_name">
+                        <small class="full-name-error"></small>
+                    </div>
+
+                    <div class="form-item">
+                        <i class='bx bxs-envelope bx-login'></i>
+                        <input type="text" placeholder="Email" id="email" name="email">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <small class="signup-email-error sho-error">
+                                        {{message}}
+                                    </small>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% else %}
+                            <small class="signup-email-error"></small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-item">
+                        <i class='bx bxs-lock-alt bx-login' ></i>
+                        <input type="password" placeholder="Password" id="password" name="new_password1">
+                        <i class='bx bxs-hide bxs-show pass-eye1'></i>
+                        <small class="password-error"></small>
+                    </div>
+
+                    <div class="dob">
+                        <p>Date of Birth</p>
+
+                        <div class="dob-inputs">
+                            <div class="dob-input-1">
+                                <input type="text" placeholder="DD" id="dob-day" name="dob-day">
+                            </div>
+
+                            <div class="dob-input-1">
+                                <input type="text" placeholder="MM" id="dob-month" name="dob-month">
+                            </div>
+
+                            <div class="dob-input-1 last-dob">
+                                <input type="text" placeholder="YYYY" id="dob-year" name="dob-year">
+                            </div>
+                        </div>
+                        <small class="dob-error">Invalid date of birth</small>
+                    </div>
+
+                    <div class="gender">
+                        <p>Gender</p>
+
+                        <div class="genders">
+                            <div class="male-div">
+                                <input type="radio" id="male" name="gen" value="male">
+                                <label for="male">Male</label>
+                            </div>
+
+                            <div class="female-div">
+                                <input type="radio" id="female" name="gen" value="female">
+                                <label for="female">Female</label>
+                            </div>
+
+                            <div class="others-div">
+                                <input type="radio" id="others" name="gen" value="others">
+                                <label for="others">Others</label>
+                            </div>
+                        </div>
+                        <small class="gender-error">Select any one option</small>
+                    </div>
+
+                    <div class="upload-profile-image-div">
+                        <p>Profile</p>
+                        <img src="{% static 'pp-female.jpg' %}" alt="" class="user-image">
+                        <input type="file" accept="image/*" name="uploaded-profile-image" id="upload-profile-button">
+                        <small class="profile-image-error">Invalid image file</small>
+                    </div>
+
+                    <div class="form-item submit-btn signup-submit-btn">
+                        <button onclick="return validateForm()" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
