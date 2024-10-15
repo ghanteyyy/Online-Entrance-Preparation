@@ -2,6 +2,7 @@ import os
 import shutil
 from pathlib import Path
 from django.db.models import Q
+from django.db import connection
 from django.core.management.base import BaseCommand
 from Users.models import CustomUser
 
@@ -38,6 +39,9 @@ class Command(BaseCommand):
 
                 if os.path.isdir(user_directory):
                     shutil.rmtree(user_directory)
+
+        with connection.cursor() as cursor:
+            cursor.execute('VACUUM')
 
         print(f"\nSuccessfully removed {number_of_users_being_deleted} users :-)")
 
