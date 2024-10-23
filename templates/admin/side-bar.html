@@ -25,26 +25,15 @@
         <p class="side-bar-items">Exams</p>
     </a>
 
-    {% if template_type == 'template::programmes' %}
-        <a class="side-bar-option selected-side-bar-option" href="{% url 'getProgrammeDetails' %}">
+    {% if template_type == 'template::subjects' or template_type == 'template::edit-subject'%}
+        <a class="side-bar-option selected-side-bar-option" href="{% url 'programmes-details' %}">
 
     {% else %}
-        <a class="side-bar-option" href="{% url 'getProgrammeDetails' %}">
+        <a class="side-bar-option" href="{% url 'programmes-details' %}">
 
     {% endif %}
         <i class='bx bx-library'></i>
         <p class="side-bar-items">Programme</p>
-    </a>
-
-    {% if template_type == 'template::subjects' or template_type == 'template::edit-subject'%}
-        <a class="side-bar-option selected-side-bar-option" href="{% url 'subject-programmes-details' %}">
-
-    {% else %}
-        <a class="side-bar-option" href="{% url 'subject-programmes-details' %}">
-
-    {% endif %}
-        <i class='bx bxs-book-alt'></i>
-        <p class="side-bar-items">Subject</p>
     </a>
 
     {% if template_type == 'template::questions' or template_type == 'template::edit-question' or template_type == 'template::add-new-question' %}

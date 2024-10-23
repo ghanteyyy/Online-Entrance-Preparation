@@ -7,15 +7,11 @@
     <div class="wrapper">
         {% include 'admin/search-results-message.html' %}
 
-        {% for d in data %}
-            {% for programme, total_tests in d.items %}
-                {% if programme not in "UserID, TestsTaken, UserEmail" %}
-                    <a href="{% url 'users-exams-each-programme' user_email=url_email programme=programme %}" class="inner-wrapper">
-                        <p class="programme">{{programme}}</p>
-                        <p class="total-tests">Total tests: {{total_tests}}</p>
-                    </a>
-                {% endif %}
-            {% endfor %}
+        {% for programme, total_tests in data.0.programme_data.items %}
+            <a href="{% url 'users-exams-each-programme' user_email=data.0.UserEmail programme=programme %}" class="inner-wrapper">
+                <p class="programme">{{programme}}</p>
+                <p class="total-tests">Total tests: {{total_tests}}</p>
+            </a>
         {% endfor %}
     </div>
 
