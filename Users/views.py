@@ -959,7 +959,7 @@ def GetUsersExamsProgrammeLists(request, user_email, exams=None):
                     'drop_down_options': drop_down_options,
                     'search_form_url': 'users-exams-programme-search',
                     'js_path': 'js/admin/UsersExamsProgrammeSearch.js',
-                    'total_searched': len(exams) if is_searching_being_done else None,
+                    'total_searched': len(exams[0]['programme_data']) if is_searching_being_done else None,
                 }
             )
 
@@ -1014,27 +1014,7 @@ def GetDetailedExamsLists(request, user_email, programme, exams=None):
             )
 
 
-def GetProgrammeLists(request):
-    """
-    Retrieve a list of programmes from an API and render them on a paginated HTML template
-    """
-
-    DATA = requests.get(f'http://{request.get_host()}/api/programmes').json()
-    paginator, data, page = PaginatePage(request, DATA)
-
-    return render(request, 'admin/Programmes.html',
-                {
-                    'data': data,
-                    'paginator': paginator,
-                    'page_title': 'Programmes',
-                    'prev_page_index': page - 1,
-                    'next_page_index': page + 1,
-                    'template_type': 'template::programmes'
-                }
-            )
-
-
-def GetSubjectPrograms(request, programme=None):
+def GetProgrammes(request, programme=None):
     """
     Retrieve and render a paginated list of subject programmes
     """
@@ -1051,7 +1031,7 @@ def GetSubjectPrograms(request, programme=None):
     if len(programme) == 0:
         return render(request, 'admin/QuestionsProgrammesSubjects.html',
                         {
-                            'page_title': 'Subjects',
+                            'page_title': 'Programmes',
                             'data_details': 'No data found',
                             'template_type': 'template::subjects',
                         }
@@ -1063,8 +1043,8 @@ def GetSubjectPrograms(request, programme=None):
                 {
                     'data': data,
                     'paginator': paginator,
-                    'page_title': 'Subjects',
                     'next___url': 'subjects',
+                    'page_title': 'Programmes',
                     'prev_page_index': page - 1,
                     'next_page_index': page + 1,
                     'sub__text': 'Total Subjects: ',
@@ -1760,8 +1740,8 @@ def SubjectSearch(request):
         subjects = subjects()
 
     redirect_maps = {
-        'programme': lambda: GetSubjectPrograms(request, programme=subjects),
-        'total subjects': lambda: GetSubjectPrograms(request, programme=subjects),
+        'programme': lambda: GetProgrammes(request, programme=subjects),
+        'total subjects': lambda: GetProgrammes(request, programme=subjects),
         'subject': lambda: GetSubjectLists(request, SEARCH_PROGRAMME, subjects=subjects),
         'total questions to select': lambda: GetSubjectLists(request, SEARCH_PROGRAMME, subjects=subjects),
     }
