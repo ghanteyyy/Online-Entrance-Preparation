@@ -191,12 +191,14 @@ class UsersExamsProgrammeListsFilter:
         """
 
         if self.data:
-            self.data = self.data[0]
-
             searching_value = self.searching_value.upper()
 
-            if searching_value in self.data:
-                return [{k:v for k, v in self.data.items() if k in ['UserID', 'UserEmail', searching_value]}]
+            for d in self.data:
+                value = d['programme_data'][searching_value]
+
+                d['programme_data'] = {searching_value: value}
+
+        return self.data
 
     def SearchByTestsTaken(self):
         """
@@ -209,11 +211,19 @@ class UsersExamsProgrammeListsFilter:
         if self.searching_value.isdigit() is False or not self.data:
             return []
 
-        self.data = self.data[0]
         searching_value = int(self.searching_value)
 
-        return [{k:v for k, v in self.data.items() if v == searching_value or k in ['UserID', 'UserEmail']}]
+        for d in self.data:
+            new_program_data = dict()
 
+            for programme, value in d['programme_data'].items():
+                if value == searching_value:
+                    new_program_data.update({programme: value})
+
+            if new_program_data:
+                d['programme_data'] = new_program_data
+
+        return self.data
 
 class DetailedExamsFilter:
     """
