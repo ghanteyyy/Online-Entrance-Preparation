@@ -51,7 +51,7 @@ class UsersExamsSerializers(serializers.ModelSerializer):
             str: The total number of tests taken by a user
         """
 
-        return ResultsExtraDetails.objects.get(UserID=obj).TestsTaken
+        return Exams.objects.filter(UserID=obj).count()
 
 
 class UsersExamsInEachProgrammeSerializers(serializers.ModelSerializer):
@@ -75,17 +75,18 @@ class UsersExamsInEachProgrammeSerializers(serializers.ModelSerializer):
 
     UserID = serializers.SerializerMethodField()
     UserEmail = serializers.SerializerMethodField()
+    programme_data = serializers.SerializerMethodField()
 
     class Meta:
         model = ResultsExtraDetails
-        fields = ['UserID', 'UserEmail', 'TestsTaken', 'BCA', 'BIT', 'BIM', 'BSCSIT']
+        fields = ['UserID', 'UserEmail', 'programme_data']
 
     def get_UserID(self, obj):
         """
         Custom method to retrieve the user ID from the given object
 
         Parameters:
-            obj: An instance of ResultsExtraDetails representing exam results
+            obj: An instance of ResultDetails representing exam results
 
         Returns:
             The user ID associated with the exam results
@@ -98,13 +99,28 @@ class UsersExamsInEachProgrammeSerializers(serializers.ModelSerializer):
         Custom method to retrieve the user email from the given object
 
         Parameters:
-            obj: An instance of ResultsExtraDetails representing exam results
+            obj: An instance of ResultDetails representing exam results
 
         Returns:
             The user email associated with the exam results
         """
 
         return obj.UserID.email
+
+    def get_programme_data(self, obj):
+        '''
+        Custom method to retrieve the number of tests taken in respective programme
+        '''
+
+        data = dict()
+
+        for programme in Programme.objects.all():
+            prog = programme.Name.upper()
+            total_tests = ResultDetails.objects.filter(ResultID__UserID=obj.UserID, ResultID__ProgrammeName__iexact=prog).count()
+
+            data[prog] = total_tests // 100
+
+        return data
 
 
 class ExamSerializers(serializers.ModelSerializer):
