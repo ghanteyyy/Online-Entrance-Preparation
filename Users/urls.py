@@ -19,6 +19,7 @@ urlpatterns = [
     path('report/<str:id>/mark', views.MarkReport, name="mark-report"),
     path('subject-search/', views.SubjectSearch, name='subject-search'),
     path('add-users/user', views.AddUsersUser, name='add-users-user'),
+    path('add-programmes/', views.AddProgramme, name='add-programmes'),
     path('programmes/', views.GetProgrammes, name='programmes-details'),
     path('add-users/admin', views.AddUsersAdmin, name='add-users-admin'),
     path('feedback-search/', views.FeedbackSearch, name='feedback-search'),

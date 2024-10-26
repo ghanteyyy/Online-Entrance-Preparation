@@ -1539,6 +1539,36 @@ def AddQuestion(request):
             )
 
 
+def AddProgramme(request):
+    if request.method == 'POST':
+        programme_name = request.POST.get('programme_name')
+        subjects = request.POST.get('subjects_list').split(',')
+        question_to_retrieve = request.POST.get('total_question_to_retrieve').split(',')
+
+        total_question = sum([int(x) for x in question_to_retrieve])
+
+        programme = Programme(
+            Name=programme_name,
+            TotalQuestions=total_question
+        )
+        programme.save()
+
+        for index, subject in enumerate(subjects):
+            sub = Subject(
+                ProgrammeID=programme,
+                Name=subject.title().strip(),
+                TotalQuestionsToSelect=int(question_to_retrieve[index])
+            )
+
+            sub.save()
+
+        messages.success(request, 'Programme Added Successful')
+
+        return redirect('add-programmes')
+
+    return render(request, 'admin/Add-Programme.html', {'page_title': "Add Programme"})
+
+
 def EditFeedback(request, id):
     """
     View to edit the details of specific feedback in admin template
