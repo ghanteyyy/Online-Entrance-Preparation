@@ -1,0 +1,60 @@
+{% extends 'admin/nav.html' %}
+{% load static %}
+
+{% block content %}
+    <script src="{% static 'js/admin/add-programme.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'css/admin/add-edit-questions.css' %}">
+
+    <div class="input-groups">
+        {% for message in messages %}
+            {% if 'question_added' in message.extra_tags %}
+                {% include 'success-message.html' %}
+            {% endif %}
+
+        {% endfor %}
+
+        <form onsubmit="return validateForm();" action="#" method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="row-left-container">
+                    <label>Programme</label>
+                </div>
+
+                <div class="row-right-container">
+                    <input type="text" placeholder="Eg: BCA" name="programme_name" id="programme_name">
+                    <small class="programme-error">Must select any programme</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row-left-container">
+                    <label>Subjects</label>
+                </div>
+
+                <div class="row-right-container">
+                    <input type="text" placeholder="Eg: English, Math, GK" name="subjects_list" id="subjects_list">
+                    <small class="subject-error">Must select any programme</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row-left-container">
+                    <label>Number of question to select</label>
+                </div>
+
+                <div class="row-right-container">
+                    <input type="text" placeholder="Eg: 50, 40, 10" name="total_question_to_retrieve" id="total_question_to_retrieve">
+                    <small class="total-question-error">Must select any programme</small>
+                </div>
+            </div>
+
+            <small class="sub-ques-num-error">Number of subject and question to retrieve must be same</small>
+
+            <div class="buttons">
+                <button type="submit" class="save-button">Save</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
