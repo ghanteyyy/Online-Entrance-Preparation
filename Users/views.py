@@ -712,10 +712,11 @@ def LeaderBoard(request):
                 avg_score = round(sum([score.CorrectCounter for score in scores]) / total_scores, 2)
                 positions.update({user: avg_score})
 
-    positions = sorted(positions.items(), key=lambda position: position[1], reverse=True)
+    sorted_values = merge_sort_dict(positions)
+
     LeaderBoardScores = []
 
-    for rank, (user, score) in enumerate(positions):
+    for rank, (user, score) in enumerate(sorted_values):
         if rank >= show_rank_up_to:
             break
 
@@ -1871,3 +1872,47 @@ def FeedbackSearch(request):
         feedbacks = feedbacks()
 
     return GetFeedbackLists(request, feedbacks=feedbacks)
+
+
+# Merge Sort Algorithm for dictionary
+def merge_sort_dict(input_dict):
+    # Convert the dict to a list of tuples (key, value)
+    items = list(input_dict.items())
+
+    if len(items) <= 1:
+        return items
+
+    # Split the list into two halves
+    mid = len(items) // 2
+    left_half = items[:mid]
+    right_half = items[mid:]
+
+    # Recursively split & merge
+    left_sorted = merge_sort_dict(dict(left_half))
+    right_sorted = merge_sort_dict(dict(right_half))
+
+    # Merge the two sorted halves
+    return merge(left_sorted, right_sorted)
+
+
+# Merging two sorted lists of tuples
+def merge(left, right):
+    i, j = 0, 0
+    sorted_list = []
+
+    # Merge based on the second element (value)
+    while i < len(left) and j < len(right):
+        # Compare the values (the second item in the tuple)
+        if left[i][1] >= right[j][1]:
+            sorted_list.append(left[i])
+            i += 1
+
+        else:
+            sorted_list.append(right[j])
+            j += 1
+
+    # Add the remaining elements
+    sorted_list.extend(left[i:])
+    sorted_list.extend(right[j:])
+
+    return sorted_list
