@@ -465,19 +465,6 @@ def GetResult(request):
 
         model_test_values[0]['CorrectCounter'] = correct_counter
 
-        resultExtraDetails = ResultsExtraDetails.objects.get(UserID=UserObj)
-
-        data = requests.get(f'http://127.0.0.1:8000/api/users_exams_each_programmes/{UserObj.id}')
-
-        if data.status_code == 200:
-            data = data.json()[0]
-
-            data['TestsTaken'] += 1
-            data[model_test_values[0]['program'].upper()] += 1
-
-            data.pop('UserID')
-            resultExtraDetails.update(commit=True, **data)
-
         return redirect('detailed-history', slug=ResultObj.Slug)
 
 
