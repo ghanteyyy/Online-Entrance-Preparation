@@ -72,4 +72,4 @@ python manage.py PopulateResults
 
 - **Frontend:** HTML5, CSS3, JavaScript
 - **Backend:** Django
-- **Database:** sqlite3
+- **Database:** postgresql
