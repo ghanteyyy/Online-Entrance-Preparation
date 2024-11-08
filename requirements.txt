@@ -1,4 +1,5 @@
 pillow
 requests
-django >= 4.2.2
+django
 djangorestframework
+dotenv
