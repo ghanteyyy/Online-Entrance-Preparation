@@ -367,34 +367,29 @@ class Questions(models.Model):
                 blank = False
             )
 
-    Answer = models.CharField(
+    Answer = models.TextField(
                 null = False,
-                blank = False,
-                max_length = 20
+                blank = False
             )
 
-    OptionOne = models.CharField(
+    OptionOne = models.TextField(
                     null = False,
-                    blank = False,
-                    max_length = 20
+                    blank = False
                 )
 
-    OptionTwo = models.CharField(
+    OptionTwo = models.TextField(
                     null = False,
-                    blank = False,
-                    max_length = 20
+                    blank = False
                 )
 
-    OptionThree = models.CharField(
+    OptionThree = models.TextField(
                     null = False,
-                    blank = False,
-                    max_length = 20
+                    blank = False
                 )
 
-    OptionFour = models.CharField(
+    OptionFour = models.TextField(
                     null = False,
-                    blank = False,
-                    max_length = 20
+                    blank = False
                 )
 
     def __str__(self):
