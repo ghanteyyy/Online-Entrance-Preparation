@@ -101,37 +101,12 @@ class CustomUser(AbstractUser):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-    FullName = models.CharField(
-                    max_length=100,
-                    null = True,
-                    blank = False
-                )
-
+    FullName = models.CharField(max_length=100, null = True, blank = False)
     email = models.EmailField(_('email address'), unique=True)
-
-    Gender = models.CharField(
-                max_length=6,
-                null = True,
-                blank = False
-            )
-
-    DOB = models.DateField(
-                null=True,
-                blank=True
-            )
-
-    ProfileImage = models.ImageField(
-                blank=True,
-                null=True,
-                upload_to=user_directory_path
-            )
-
-    MemberSince = models.DateTimeField(
-                    null=False,
-                    blank=False,
-                    default=now,
-                    editable=False,
-                )
+    Gender = models.CharField(max_length=6, null = True, blank = False)
+    DOB = models.DateField(null=True, blank=True)
+    ProfileImage = models.ImageField(blank=True, null=True, upload_to=user_directory_path)
+    MemberSince = models.DateTimeField(null=False, blank=False, default=now, editable=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -147,41 +122,13 @@ class Exams(models.Model):
     class Meta:
         verbose_name_plural = "Exams"
 
-    UserID = models.ForeignKey(
-            "CustomUser",
-            on_delete = models.CASCADE
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    UserID = models.ForeignKey("CustomUser", on_delete = models.CASCADE)
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    ProgrammeName = models.CharField(
-                        null = False,
-                        blank = False,
-                        max_length = 10
-                    )
-
-    CorrectCounter = models.SmallIntegerField(
-                        null = False,
-                        blank = False,
-                        default = 0
-                    )
-
-    Slug = models.SlugField(
-                        null = False,
-                        blank = False,
-                        unique = True
-                    )
-
-    Date = models.DateField(
-                null=False,
-                blank=False,
-                editable=False,
-                default=datetime.date.today
-            )
+    ProgrammeName = models.CharField(null = False, blank = False, max_length = 10)
+    CorrectCounter = models.SmallIntegerField(null = False, blank = False, default = 0)
+    Slug = models.SlugField(null = False, blank = False, unique = True)
+    Date = models.DateField(null=False, blank=False, editable=False, default=datetime.date.today)
 
     def save(self, *args, **kwargs):
         self.Slug = GenerateRandomURL('Result')
@@ -200,69 +147,25 @@ class ResultDetails(models.Model):
     class Meta:
         verbose_name_plural = "ResultDetails"
 
-    ResultID = models.ForeignKey(
-            "Exams",
-            on_delete = models.CASCADE
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ResultID = models.ForeignKey("Exams", on_delete = models.CASCADE)
+    QuestionID = models.ForeignKey("Questions", on_delete = models.CASCADE)
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    QuestionID = models.ForeignKey(
-                    "Questions",
-                    on_delete = models.CASCADE
-                )
-
-    UserAnswer = models.CharField(
-                    null = False,
-                    blank = False,
-                    max_length = 20
-                )
+    UserAnswer = models.CharField(null = False, blank = False, max_length = 20)
 
 
 class ResultsExtraDetails(models.Model):
     class Meta:
         verbose_name_plural = "ResultsExtraDetails"
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    UserID = models.ForeignKey("CustomUser", on_delete = models.CASCADE)
 
-    UserID = models.ForeignKey(
-            "CustomUser",
-            on_delete = models.CASCADE
-        )
-
-    TestsTaken = models.PositiveIntegerField(
-                    null = False,
-                    blank = False,
-                    default=0
-            )
-    BCA = models.PositiveIntegerField(
-                    null = False,
-                    blank = False,
-                    default=0
-            )
-    BIT = models.PositiveIntegerField(
-                    null = False,
-                    blank = False,
-                    default=0
-            )
-    BIM = models.PositiveIntegerField(
-                    null = False,
-                    blank = False,
-                    default=0
-            )
-    BSCSIT = models.PositiveIntegerField(
-                    null = False,
-                    blank = False,
-                    default=0
-            )
+    TestsTaken = models.PositiveIntegerField(null = False, blank = False, default=0)
+    BCA = models.PositiveIntegerField(null = False, blank = False, default=0)
+    BIT = models.PositiveIntegerField(null = False, blank = False, default=0)
+    BIM = models.PositiveIntegerField(null = False, blank = False, default=0)
+    BSCSIT = models.PositiveIntegerField(null = False, blank = False, default=0)
 
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
@@ -280,23 +183,9 @@ class Programme(models.Model):
     class Meta:
         verbose_name_plural = "Programme"
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    Name = models.CharField(
-            null = False,
-            blank = False,
-            max_length = 10
-        )
-
-    TotalQuestions = models.BigIntegerField(
-            null = False,
-            blank = False,
-            default=0
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Name = models.CharField(null = False, blank = False, max_length = 10)
+    TotalQuestions = models.BigIntegerField(null = False, blank = False, default=0)
 
     def __str__(self):
         return self.Name
@@ -310,34 +199,12 @@ class Subject(models.Model):
     class Meta:
         verbose_name_plural = "Subject"
 
-    ProgrammeID = models.ForeignKey(
-            "Programme",
-            on_delete = models.CASCADE
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ProgrammeID = models.ForeignKey("Programme", on_delete = models.CASCADE)
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    Name = models.CharField(
-            null = False,
-            blank = False,
-            max_length = 50
-        )
-
-    TotalQuestions = models.BigIntegerField(
-            null = False,
-            blank = False,
-            default=0
-        )
-
-    TotalQuestionsToSelect = models.SmallIntegerField(
-            null = False,
-            blank = False,
-            default=1
-        )
+    Name = models.CharField(null = False, blank = False, max_length = 50)
+    TotalQuestions = models.BigIntegerField(null = False, blank = False, default=0)
+    TotalQuestionsToSelect = models.SmallIntegerField(null = False, blank = False, default=1)
 
     def __str__(self):
         return self.Name
@@ -351,46 +218,15 @@ class Questions(models.Model):
     class Meta:
         verbose_name_plural = "Questions"
 
-    SubjectID = models.ForeignKey(
-            'Subject',
-            on_delete = models.CASCADE
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    SubjectID = models.ForeignKey('Subject', on_delete = models.CASCADE)
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    Title = models.TextField(
-                null = False,
-                blank = False
-            )
-
-    Answer = models.TextField(
-                null = False,
-                blank = False
-            )
-
-    OptionOne = models.TextField(
-                    null = False,
-                    blank = False
-                )
-
-    OptionTwo = models.TextField(
-                    null = False,
-                    blank = False
-                )
-
-    OptionThree = models.TextField(
-                    null = False,
-                    blank = False
-                )
-
-    OptionFour = models.TextField(
-                    null = False,
-                    blank = False
-                )
+    Title = models.TextField(null = False, blank = False)
+    Answer = models.TextField(null = False, blank = False)
+    OptionOne = models.TextField(null = False, blank = False)
+    OptionTwo = models.TextField(null = False, blank = False)
+    OptionThree = models.TextField(null = False, blank = False)
+    OptionFour = models.TextField(null = False, blank = False)
 
     def __str__(self):
         return str(self.ID)
@@ -404,39 +240,13 @@ class ReportQuestion(models.Model):
     class Meta:
         verbose_name_plural = 'ReportQuestion'
 
-    UserID = models.ForeignKey(
-            "CustomUser",
-            on_delete = models.CASCADE
-        )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    UserID = models.ForeignKey("CustomUser", on_delete = models.CASCADE)
+    QuestionID = models.ForeignKey("Questions", on_delete = models.CASCADE)
 
-    QuestionID = models.ForeignKey(
-                    "Questions",
-                    on_delete = models.CASCADE
-                )
-
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    Issue = models.TextField(
-                null=False,
-                blank=False
-            )
-
-    IsMarked = models.BooleanField(
-            null=False,
-            blank=False,
-            default=False
-        )
-
-    Date = models.DateField(
-                null=False,
-                blank=False,
-                editable=False,
-                default=datetime.date.today
-            )
+    Issue = models.TextField(null=False, blank=False)
+    IsMarked = models.BooleanField(null=False, blank=False, default=False)
+    Date = models.DateField(null=False, blank=False, editable=False, default=datetime.date.today)
 
 
 class FeedBack(models.Model):
@@ -447,40 +257,12 @@ class FeedBack(models.Model):
     class Meta:
         verbose_name_plural = "FeedBack"
 
-    ID = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-        )
-
-    Name = models.CharField(
-            null = False,
-            blank = False,
-            max_length = 100
-        )
-
-    Email = models.EmailField(
-            null=False,
-            blank=False
-        )
-
-    Message = models.TextField(
-            null=False,
-            blank=False
-        )
-
-    IsMarked = models.BooleanField(
-            null=False,
-            blank=False,
-            default=False
-        )
-
-    Date = models.DateTimeField(
-                null=False,
-                blank=False,
-                default=now,
-                editable=False
-            )
+    ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    Name = models.CharField(null = False, blank = False, max_length = 100)
+    Email = models.EmailField(null=False, blank=False)
+    Message = models.TextField(null=False, blank=False)
+    IsMarked = models.BooleanField(null=False, blank=False, default=False)
+    Date = models.DateTimeField(null=False, blank=False, default=now, editable=False)
 
     def __str__(self):
         return str(self.ID)
