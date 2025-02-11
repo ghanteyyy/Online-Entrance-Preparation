@@ -2,7 +2,7 @@ import os
 import shutil
 from django.core.management.base import BaseCommand
 from Users.models import *
-from ForeSight.settings import BASE_DIR
+from core.settings import BASE_DIR
 
 
 class DeleteDirs:
