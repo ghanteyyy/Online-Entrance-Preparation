@@ -2,4 +2,4 @@ pillow
 requests
 django
 djangorestframework
-dotenv
+python-dotenv
