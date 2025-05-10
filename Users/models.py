@@ -151,7 +151,7 @@ class ResultDetails(models.Model):
     ResultID = models.ForeignKey("Exams", on_delete = models.CASCADE)
     QuestionID = models.ForeignKey("Questions", on_delete = models.CASCADE)
 
-    UserAnswer = models.CharField(null = False, blank = False, max_length = 20)
+    UserAnswer = models.CharField(null = False, blank = False, max_length = 255)
 
 
 class ResultsExtraDetails(models.Model):
@@ -184,7 +184,7 @@ class Programme(models.Model):
         verbose_name_plural = "Programme"
 
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    Name = models.CharField(null = False, blank = False, max_length = 10)
+    Name = models.CharField(null = False, blank = False, max_length = 255)
     TotalQuestions = models.BigIntegerField(null = False, blank = False, default=0)
 
     def __str__(self):
@@ -202,7 +202,7 @@ class Subject(models.Model):
     ID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ProgrammeID = models.ForeignKey("Programme", on_delete = models.CASCADE)
 
-    Name = models.CharField(null = False, blank = False, max_length = 50)
+    Name = models.CharField(null = False, blank = False, max_length = 255)
     TotalQuestions = models.BigIntegerField(null = False, blank = False, default=0)
     TotalQuestionsToSelect = models.SmallIntegerField(null = False, blank = False, default=1)
 
