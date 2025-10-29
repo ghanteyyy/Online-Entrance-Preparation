@@ -287,7 +287,7 @@ def TakeModelTest(request, program):
         for question in questions:
             choices = [question.OptionOne, question.OptionTwo, question.OptionThree, question.OptionFour]
             details = {
-                'id': question.ID,
+                'id': str(question.ID),
                 'title': question.Title,
                 'choices': choices,
                 'answer': question.Answer,
@@ -300,6 +300,7 @@ def TakeModelTest(request, program):
     return render(request, 'ModelTest.html',
                     {
                         'questions': model_test_values,
+                        'questions_json': json.dumps(model_test_values),
                         'nav_template': 'nav.html',
                         'page_title': f'{program} | Test Ongoing'
                     }
@@ -525,7 +526,7 @@ def DetailedHistory(request, slug):
     else:
         nav_template = 'nav.html'
 
-    return render(request, 'ModelTest.html',
+    return render(request, 'result_history.html',
                     {
                         'questions': values,
                         'nav_template': nav_template,
