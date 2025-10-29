@@ -27,7 +27,7 @@ class PopulateResults:
             programmes = [random.choice(all_programmes) for _ in range(self.NumberOfResultsToGenerate)]
 
         else:
-            programme = self.Programme
+            programme = self.Programme.Name
             allSubjects = self.GetSubjects(self.Programme)
 
         for i in range(self.NumberOfResultsToGenerate):
@@ -49,8 +49,7 @@ class PopulateResults:
                 questions = list(Questions.objects.filter(SubjectID=subject.ID))
                 random.shuffle(questions)
 
-                for num in range(total_questions_per_subject):
-                    question = questions[num]
+                for question in questions:
                     wrong_or_right = random.SystemRandom().choice([0, 1])
 
                     if number_of_correct_answers_to_select > 0 and wrong_or_right:
@@ -73,18 +72,22 @@ class PopulateResults:
                 results.CorrectCounter = correct_counter
                 results.save()
 
-            resultExtraDetails = ResultsExtraDetails.objects.get(UserID=self.UsersObj)
+            resultExtraDetails = ResultsExtraDetails.objects.get_or_create(UserID=self.UsersObj)[0]
 
-            data = requests.get(f'http://127.0.0.1:8000/api/users_exams_each_programmes/{self.UsersObj.id}')
+            if programme.lower() == 'bca':
+                resultExtraDetails.BCA += 1
 
-            if data.status_code == 200:
-                data = data.json()[0]
+            elif programme.lower() == 'bit':
+                resultExtraDetails.BIT += 1
 
-                data['TestsTaken'] += 1
-                data[programme.upper()] += 1
+            elif programme.lower() == 'bim':
+                resultExtraDetails.BIM += 1
 
-                data.pop('UserID')
-                resultExtraDetails.update(commit=True, **data)
+            elif programme.lower() == 'bscsit':
+                resultExtraDetails.BSCSIT += 1
+
+            resultExtraDetails.TestsTaken += 1
+            resultExtraDetails.save()
 
 
 class Command(BaseCommand):
