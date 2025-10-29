@@ -6,107 +6,16 @@
     <link rel="stylesheet" href="{% static 'css/modeltest.css' %}">
     <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    {% if questions.0.checked %}
-        <form action="#" id="read-only-form">
-
-    {% else %}
-        <form action="{% url 'get-result' %}" method="POST">
-
-    {% endif %}
+    <form  action="{% url 'get-result' %}" method="POST" id="quiz-form">
         {% csrf_token %}
 
-        <div class="marks {% if questions.0.checked == False %}hide-marks{% endif %}">
-            <p class="obtained-marks">{{CorrectCounter}}</p>
-            <p class="total-marks">100</p>
-        </div>
+        <div class="QuestionAnotherContainer taking-test">
+            <div class="timer">
+                <p id="timer-text">Starts at: 5</p>
+            </div>
 
-        {% if questions.0.checked %}
-            <div class="QuestionContainer">
-
-        {% else %}
-            <div class="QuestionAnotherContainer taking-test">
-
-        {% endif %}
-            {% if questions.0.checked is False and request.user.is_superuser is False %}
-                <div class="timer">
-                    <p id="timer-text">Starts at: 5</p>
-                </div>
-
-            {% endif %}
-
-            {% for question in questions %}
-                <div class="Questions">
-                    <p class="question-number">{{forloop.counter}}.</p>
-
-                    <div class="question-details">
-                        <div class="Question">
-                            <p class="question-title">{{question.title}}</p>
-
-                            {% if request.user.is_superuser is False %}
-                                <a href="{% url 'report-question' question.id %}" target="_blank">
-                                    <i class='bx bxs-flag-alt alt-flag' title="Report"></i>
-                                </a>
-                            {% endif %}
-
-                        </div>
-
-                        <div class="options">
-                            {% for choice in question.choices %}
-                                {% if question.checked %}
-                                    {% if choice == question.UserAnswer %}
-                                        {% if question.is_correct %}
-                                            <div class="choice correct-div">
-
-                                        {% else %}
-                                            <div class="choice wrong-div">
-
-                                        {% endif %}
-
-                                    {% else %}
-                                        {% if question.UserAnswer == '-' and choice == question.answer%}
-                                            <div class="choice correct-div">
-
-                                        {% elif choice == question.answer %}
-                                            <div class="choice correct-div">
-
-                                        {% else %}
-                                            <div class="choice">
-
-                                        {% endif %}
-
-                                    {% endif %}
-
-                                {% else %}
-                                    <div class="choice">
-
-                                {% endif %}
-                                    {% if choice == question.UserAnswer and question.checked %}
-                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" name="choices {{forloop.parentloop.counter}}" value="{{forloop.counter}}" checked {% if request.user.is_superuser %} disabled {% endif %}>
-
-                                    {% else %}
-                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" name="choices {{forloop.parentloop.counter}}" value="{{forloop.counter}}" {% if request.user.is_superuser %} disabled {% endif %}>
-
-                                    {% endif %}
-
-                                    <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
-                                </div>
-                            {% endfor %}
-
-                            {% if question.checked and question.UserAnswer == '-' %}
-                                <p class="no-answer">No option was selected </p>
-
-                            {% endif %}
-
-                            <small class="error-message">Must select any one</small>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-
-            {% if questions.0.checked is False and request.user.is_superuser is False %}
-                <button type="submit" id="submit-button" onclick="return checkForSubmission()">Submit</button>
-            {% endif %}
-
+            <div class="Questions" id="questions-root">
+            </div>
         </div>
     </form>
 
@@ -119,8 +28,12 @@
             var is_checked = '{% if questions.0.checked == True %}true{% else %}false{% endif %}';
         </script>
 
-        <script src="{% static 'js/scroll.js' %}"></script>
-        <script src="{% static 'js/ModelTest.js' %}"></script>
+        <script id="question_details"  type="application/json">
+            {{questions_json|safe}}
+        </script>
+
+        <script src="{% static 'js/scroll.js' %}" defer></script>
+        <script src="{% static 'js/ModelTest.js' %}" defer></script>
         <link rel="stylesheet" href="{% static 'css/scroll.css' %}">
 
     {% else %}

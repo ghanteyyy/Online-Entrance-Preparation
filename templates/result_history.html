@@ -1,0 +1,73 @@
+{% extends nav_template %}
+{% load static %}
+
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/scroll.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modeltest.css' %}">
+    <link rel="stylesheet" href="{% static 'css/result_history.css' %}">
+
+    {% if request.user.is_superuser %}
+        <style>
+            .marks{
+                left: -5%;
+            }
+        </style>
+    {% endif %}
+
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <form action="#" id="read-only-form">
+        <div class="marks {% if questions.0.checked == False %}hide-marks{% endif %}">
+            <p class="obtained-marks">{{CorrectCounter}}</p>
+            <p class="total-marks">100</p>
+        </div>
+
+        <div class="QuestionContainer">
+            {% for question in questions %}
+                <div class="Questions">
+                    <div class="question-details">
+                        <div class="Question">
+                            <p class="question-title">{{forloop.counter}}. {{question.title}}</p>
+
+                            {% if request.user.is_superuser is False %}
+                                <a href="{% url 'report-question' question.id %}" target="_blank">
+                                    <i class='bx bxs-flag-alt alt-flag' title="Report"></i>
+                                </a>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="options">
+                            {% for choice in question.choices %}
+                                {% if choice == question.UserAnswer and question.is_correct %}
+                                    <div class="choice correct-div">
+                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" checked disabled>
+                                        <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
+                                    </div>
+
+                                {% elif choice == question.answer and not question.is_correct and not question.UserAnswer == '-'%}
+                                    <div class="choice correct-div">
+                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" checked disabled>
+                                        <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
+                                    </div>
+                                {% elif choice == question.UserAnswer and question.is_correct is False %}
+                                    <div class="choice wrong-div">
+                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" checked disabled>
+                                        <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
+                                    </div>
+
+                                {% else %}
+                                    <div class="choice">
+                                        <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" disabled>
+                                        <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </form>
+{% endblock %}
