@@ -139,12 +139,6 @@ function createQuestionHTML(question, qIndex, total) {
     wrapper.className = "question-card";
     wrapper.dataset.index = qIndex;
 
-    // Question number
-    const qNum = document.createElement("p");
-    qNum.className = "question-number";
-    qNum.textContent = `${qIndex}.`;
-    wrapper.appendChild(qNum);
-
     // Question details
     const details = document.createElement("div");
     details.className = "question-details";
@@ -154,6 +148,11 @@ function createQuestionHTML(question, qIndex, total) {
     const qBox = document.createElement("div");
     qBox.className = "Question";
     details.appendChild(qBox);
+
+    const qNum = document.createElement("p");
+    qNum.className = "question-number";
+    qNum.textContent = `${qIndex}.`;
+    qBox.appendChild(qNum);
 
     const qTitle = document.createElement("p");
     qTitle.className = "question-title";
