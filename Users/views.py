@@ -280,7 +280,7 @@ def TakeModelTest(request, program):
 
     for subject in Subject.objects.filter(ProgrammeID=programme):
         questions = list(Questions.objects.filter(SubjectID=subject))
-        random.shuffle(questions)
+        questions = fisher_yates_shuffle(questions)
 
         questions = questions[:subject.TotalQuestionsToSelect]
 
@@ -1890,6 +1890,19 @@ def FeedbackSearch(request):
         feedbacks = feedbacks()
 
     return GetFeedbackLists(request, feedbacks=feedbacks)
+
+
+def fisher_yates_shuffle(arr):
+    """
+    Shuffle the given list in place using the Fisher–Yates algorithm.
+    """
+    n = len(arr)
+
+    for i in range(n - 1, 0, -1):
+        j = random.randint(0, i)
+        arr[i], arr[j] = arr[j], arr[i]
+
+    return arr
 
 
 # Merge Sort Algorithm for dictionary
