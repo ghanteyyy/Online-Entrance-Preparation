@@ -211,7 +211,7 @@ function createQuestionHTML(question, qIndex, total) {
         nextBtn.textContent = "Next →";
         nextBtn.onclick = () => showQuestion(qIndex + 1);
         navDiv.appendChild(nextBtn);
-    } else {
+
         // Last question → show Submit button
         const submitBtn = document.createElement("button");
         submitBtn.type = "submit";                    // submit the form
