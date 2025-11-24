@@ -10,7 +10,7 @@
     {% if request.user.is_superuser %}
         <style>
             .marks{
-                left: -5%;
+                left: -15%;
             }
         </style>
     {% endif %}
@@ -58,7 +58,7 @@
                                     </div>
 
                                 {% else %}
-                                    <div class="choice">
+                                    <div class="choice {% if question.UserAnswer == '-' and choice == question.answer %}correct-div{%endif%}">
                                         <input type="radio" class="radio-choices" id="{{forloop.parentloop.counter}}{{forloop.counter}}" disabled>
                                         <label class="option-labels" for="{{forloop.parentloop.counter}}{{forloop.counter}}">{{choice}}</label>
                                     </div>
